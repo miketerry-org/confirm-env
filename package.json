@@ -1,0 +1,23 @@
+{
+  "name": "confirm-env",
+  "version": "1.0.0",
+  "description": "confirm validity of environment variables",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "NODE_ENV=TEST node --test"
+  },
+  "keywords": [
+    "check",
+    "env",
+    "environment",
+    "variables"
+  ],
+  "author": "miketerry.org",
+  "license": "MIT",
+  "devDependencies": {
+    "dotenv": "^16.4.5"
+  }
+}
