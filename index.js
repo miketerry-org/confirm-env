@@ -52,6 +52,11 @@ function arrayToText(values) {
   return `[${formattedArray}]`;
 }
 
+// convert text to array
+function textToArray(text) {
+  return text.trim().split(",");
+}
+
 // returns true if the value is a number
 function validNumber(value) {
   return typeof value === "number" && !isNaN(value);

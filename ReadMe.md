@@ -1,6 +1,6 @@
 <br/>
 
-# **checkenv**
+# **env-checker**
 
 <br/>
 
@@ -8,7 +8,7 @@
 
 <br/>
 
-**checkenv** is a zero dependency package which exports the **check(name)** function which is used to verify environment variables meet all requirements. The **check** function accepts the name of the environment variable you want to verify. This function returns a number of nested comparison functions which can be chained together to ensure the named environment variable meets all requirements. If any of the comparison functions fail an error will be thrown with an appropriate error message. It is recommended you use a try/catch block when using the **check** function. Your application can then recover from the error or if necessary it can halt the execution of the program.
+**env-checker** is a zero dependency package which exports the **check(name)** function which is used to verify environment variables meet all requirements. The **check** function accepts the name of the environment variable you want to verify. This function returns a number of nested comparison functions which can be chained together to ensure the named environment variable meets all requirements. If any of the comparison functions fail an error will be thrown with an appropriate error message. It is recommended you use a try/catch block when using the **check** function. Your application can then recover from the error or if necessary it can halt the execution of the program.
 
 <br/>
 
