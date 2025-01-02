@@ -1,7 +1,7 @@
 {
-  "name": "env-checker",
+  "name": "confirm-env",
   "version": "1.0.0",
-  "description": "Check validity of environment variables",
+  "description": "Confirm environment variables are valid",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -11,8 +11,10 @@
   },
   "keywords": [
     "check",
+    "confirm",
     "env",
     "environment",
+    "valid",
     "variables"
   ],
   "author": "miketerry.org",

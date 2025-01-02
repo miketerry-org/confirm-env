@@ -1,155 +1,197 @@
-<br/>
+# confirm-env
 
-# **env-checker**
+The `confirm-env` package provides a simple and flexible way to confirm the validity of environment variables in Node.js applications. It allows for setting, checking, and validating environment variables with various chained methods.
 
-<br/>
+This library is useful for ensuring that required environment variables are properly configured and meet specific criteria before your application runs.
 
-## Package to verify environment variables
+## Installation
 
-<br/>
+You can install the package from npm:
 
-**env-checker** is a zero dependency package which exports the **check(name)** function which is used to verify environment variables meet all requirements. The **check** function accepts the name of the environment variable you want to verify. This function returns a number of nested comparison functions which can be chained together to ensure the named environment variable meets all requirements. If any of the comparison functions fail an error will be thrown with an appropriate error message. It is recommended you use a try/catch block when using the **check** function. Your application can then recover from the error or if necessary it can halt the execution of the program.
+```bash
+npm install confirm-env
 
-<br/>
+Usage
 
-### Comparisons which accept no parameters
+const confirm = require("confirm-env");
 
-<br/>
+// Example usage:
+confirm("MY_ENV_VAR")
+  .is("expected_value")
+  .hasLength(5, 10)
+  .isDefined();
 
-- **not** &rarr; Negates the next comparison function.
 
-<br/>
+##confirm Function
 
-### Comparisons which accept no parameters
+The main function in the package is confirm(name, defaultValue). It takes an environment variable name as its first argument and an optional default value as the second argument. It returns a set of chained methods that allow you to check various conditions for the environment variable.
 
-<br/>
+Parameters:
+name (string): The name of the environment variable to confirm.
+defaultValue (string | undefined): An optional default value to use if the environment variable is not set.
+Returns:
+Object: A chainable object that provides various methods to confirm the validity of the environment variable.
 
-### Comparisons which accept two parameters
+##Chained Methods and Properties
 
-<br/>
-<br/>
+The returned object provides the following methods for checking and validating environment variables. You can chain multiple methods together to perform complex checks.
 
-### Comparisons which will validate and optionally alter the environment variable
+###1. .not
+This method negates the subsequent condition (for logical NOT).
 
-<br/>
+Usage:
 
-- **toBeFile(expand)** &rarr; Environment variable is optionally expanded to full filename and always verified to exist.
-- **toBePath(expand, autoCreate)** &rarr; Environment variable is optionally expanded to full pathname and optionally created
+confirm("MY_ENV_VAR").not.is("unexpected_value");
 
-<br/>
+###2. .is(compare)
+Checks if the environment variable is equal to the provided value.
 
-### Code Block
+Parameters:
 
+compare (any): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").is("expected_value");
+
+###3. .isDefined()
+Checks if the environment variable is defined (i.e., it is not undefined).
+
+Usage:
+
+confirm("MY_ENV_VAR").isDefined();
+
+###4. .isEQ(compare)
+Checks if the environment variable is equal to the provided value (same as .is()).
+
+Parameters:
+
+compare (any): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").isEQ("expected_value");
+
+###5. .isGT(compare)
+Checks if the environment variable is greater than the provided value.
+
+Parameters:
+
+compare (number): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").isGT(10);
+
+###6. .isGE(compare)
+Checks if the environment variable is greater than or equal to the provided value.
+
+Parameters:
+
+compare (number): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").isGE(10);
+
+###7. .isLT(compare)
+Checks if the environment variable is less than the provided value.
+
+Parameters:
+
+compare (number): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").isLT(100);
+
+###8. .isLE(compare)
+Checks if the environment variable is less than or equal to the provided value.
+
+Parameters:
+
+compare (number): The value to compare the environment variable to.
+
+Usage:
+
+confirm("MY_ENV_VAR").isLE(100);
+
+###9. .hasLength(min, max)
+Checks if the length of the environment variable's value is within the specified range.
+
+Parameters:
+
+min (number): The minimum length.
+max (number): The maximum length.
+
+Usage:
+
+confirm("MY_ENV_VAR").hasLength(5, 10);
+
+###10. .contains(substring)
+Checks if the environment variable's value contains a specific substring.
+
+Parameters:
+
+substring (string): The substring to check for.
+
+Usage:
+
+confirm("MY_ENV_VAR").contains("part_of_value");
+
+###11. .matches(regex)
+Checks if the environment variable's value matches a regular expression.
+
+Parameters:
+
+regex (string): The regular expression to match.
+
+Usage:
+
+confirm("MY_ENV_VAR").matches("^[A-Z]{3}$");
+
+###12. .isIn(values)
+Checks if the environment variable's value is included in a provided array of values.
+
+Parameters:
+
+values (Array): An array of possible valid values.
+
+Usage:
+
+confirm("MY_ENV_VAR").isIn(["value1", "value2", "value3"]);
+
+###13. .isPath(force = true)
+Checks if the environment variable's value is a valid filesystem path. Optionally, it can create the directory if it doesn't exist.
+
+Parameters:
+
+force (boolean, default: true): If true, creates the directory if it doesn't exist. If false, will throw an error if the path doesn't exist.
+
+Usage:
+
+confirm("MY_ENV_VAR").isPath();
+
+##Example
+
+Here's a full example of using the package to confirm multiple conditions for an environment variable:
+
+const confirm = require("confirm-env");
+
+confirm("DATABASE_URL")
+  .isDefined()
+  .contains("mongodb")
+  .is("mongodb://localhost:27017")
+  .hasLength(10, 100);
+
+   this example, the following checks are performed on the DATABASE_URL environment variable:
+
+It must be defined.
+It must contain the substring "mongodb".
+It must be equal to "mongodb://localhost:27017".
+Its length must be between 10 and 100 characters.
+
+##License
+
+This package is licensed under the MIT License.
 ```
-
-// import the check function
-const check = require("checkenv");
-
-try {
-// ensure node environment variable is one of the allowed values
-check("NODE_ENV").toBeIn(["DEBUG", "DEV", "PROD", "TEST"]);
-
-// ensure server port is defined and between 1000 and 60000
-check("SERVER_PORT").toBeGreaterThanOrEqual(1000).toBeLessThanOrEqual(60000);
-
-// ensure database connection string is defined
-check("DB_URL").toBeDefined();
-
-// ensure the public folder exists and expand too fully qualified path
-check("PUBLIC_PATH").toBePath(true, false);
-
-// ensure views path is defined
-check("VIEWS_PATH").toBePath(true, false);
-
-// ensure log path defined and create it if necessary
-check("LOG_PATH").toBePath(true, true);
-
-} catch(err) {
-    // log error message to console
-    console.error(err.message);
-
-    // not safe to continue program execution so halt program
-    process.exit(1);
-}
-
-```
-
-<br/>
-
-### NODE_ENV and the **check** function
-
-<br/>
-
-Often developers will need separate values for development, debugging, testing and production. One common environment variable needing this support is the URL for a database connnection string. Imagine the need for a separate database to be used when developing, another when debugging, another when using automated testing andstill another when in production. This requires threee environment variables be defined on the local machine and one on the remote production machine:
-
-<br/>
-
-Local development machine environment variables:
-
-<br/>
-
-- **DB_URL_DEV** &rarr; URL for local development database.
-- **DB_URL_DEBUG** &rarr; URL for local debug database.
-- **DB_URL_TEST** &rarr; URL for local testing database.
-- **SERVER_PORT** &rarr; HTTP port for local server development.
-
-<br/>
-
-Remote production machine environment variables:
-
-<br/>
-
-- **DB_URL** &rarr; URL for production database.
-- **SERVER_PORT** &rarr; HTTP port for remote production server.
-
-<br/>
-
-when the **check function is called it first checks to see if the environment variable specified by the "name" parameter exists. If it does exist then the **check\*\* function proceeds normally. However, if the "name" environment variable does not exist and the NODE_ENV variable does exist, then an underscore character and the value of the NODE_ENV variable are appended to the "name" parameter. If a variable with this new name exists then the environment variable with the new name will be renamed to the original name. Ffor exammple, if name equals "DB_URL" and "NODE_ENV" equals "DEV", the "DB_URL_DEV" environment variable will be renamed to "DB_URL". If neither name exists then an error is thrown with an appropriate message.
-
-<br/>
-
-There are several NPM packages like [**dotenv**](https://github.com/motdotla/dotenv#readme), which allow you to define a file containing all local development environment variables. If you use one of these packages you must initialize the package before calling the check function. By using an .env file to declare development environment variables and using the production server admin console to define production values, goals two and three of the [12 Factor Methodology](https://12factor.net) are achieved.
-
-##Comparisons
-
-- data type comparisons
-- value comparisons
-- string comparisons
-- special comparisons
-
-x- not
-x -is(value)
-x- is LT(value)
-x- isLE(value)
-x-isGT(value)
-x- isGE(value)- isBetween(minValue, maxValue)
-x- isBetween
-
-- isBoolean
-- isEmail
-- isURL
-- isDate
-- isTime
-- isAlpha
-- isAlphaNumeric
-
-x- isLength(minLength, maxLength)
-
-- isHex
-- isUUID
-- isIP
-- isLowercase
-- isUppercase
-- isNotEmpty
-- isInteger
-- isFloat
-- isNumber
-- isDefined
-- isUndefined
-  x- isSubstr(substr)
-  x- isMatch(regEx)
-  x- isIn(array)
-- isFile(filename)
-- isPath(dirname)
-
-x- not
