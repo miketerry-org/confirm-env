@@ -1,6 +1,6 @@
 {
   "name": "confirm-env",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Confirm environment variables are valid",
   "main": "index.js",
   "directories": {

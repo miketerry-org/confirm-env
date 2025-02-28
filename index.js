@@ -165,11 +165,6 @@ function confirm(name, defaultValue = undefined) {
   // assume comparison will fail
   let valid = false;
 
-  // if development mode then log to console
-  if (process.env.NODE_ENV && process.env.NODE_ENV.toUpperCase() === "DEV") {
-    console.info(name, value);
-  }
-
   // define all the supported chained methods
   const methods = {
     /**
